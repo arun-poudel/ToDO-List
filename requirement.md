@@ -11,3 +11,10 @@ Key Features:
 * Add, view, update, delete todos
 * Mark todos as complete/incomplete
 * List all todos
+
+
+- `id` - Should auto-increment (hint: use SERIAL)
+- `title` - Text, required
+- `description` - Text, optional
+- `completed` - Boolean, default false
+- `created_at` - Timestamp, default to current time
