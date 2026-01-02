@@ -96,6 +96,33 @@ app.put("/todos/:id", async (req, res) => {
   }
 });
 
+// Delete Route - Remove a specific todo by ID
+app.delete("/todos/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const queryText = `
+    DELETE FROM todo
+    WHERE 
+    id = $1 
+    RETURNING *;
+    `;
+    const result = await pool.query(queryText, [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({ error: "todo is not found" });
+    }
+
+    res.status(200).json({
+      message: "Todo deleted successfully",
+      deletedTodo: result.rows[0],
+    });
+  } catch (err) {
+    console.error("Error Deleting todo:", err);
+    res.status(500).json({ error: "internal server error" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`server is running at http://localhost:${PORT}`);
 });
