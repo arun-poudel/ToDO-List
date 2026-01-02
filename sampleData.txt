@@ -1,0 +1,11 @@
+INSERT INTO todo (title, description, completed) VALUES
+('Morning Exercise', '30 minutes of cardio and stretching', true),
+('Buy Groceries', 'Milk, eggs, bread, and fruits', false),
+('Project 1 Documentation', 'Complete the README.md for the Todo API', true),
+('Read 10 Pages', 'Currently reading "Clean Code"', false),
+('Doctor Appointment', 'Visit at 4 PM for annual checkup', false),
+('Team Meeting', 'Discuss Project 2 architecture on Zoom', true),
+('Water Plants', 'Don''t forget the succulents in the balcony', false),
+('Clean Workspace', 'Organize cables and dust the monitor', true),
+('Bug Fixing', 'Fix the COALESCE typo in the Update route', true),
+('Meal Prep', 'Prepare lunch boxes for the next 3 days', false);
