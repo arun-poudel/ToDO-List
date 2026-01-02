@@ -60,6 +60,42 @@ app.get("/todos/all", async (req, res) => {
   }
 });
 
+// UPDATE Route -Update a specific todo by ID
+
+app.put("/todos/:id", async (req, res) => {
+  const { id } = req.params;
+  const { title, description, completed } = req.body;
+
+  try {
+    const queryText = `
+    UPDATE todo
+    SET 
+      title =  COALESCE($1, title),
+      description = COALESCE($2, description),
+      completed = COALESCE($3, completed)
+
+    WHERE id = $4
+    RETURNING *;
+    `;
+    const values = [title, description, completed, id];
+    const result = await pool.query(queryText, values);
+
+    // IF result.rows is empty, it means the ID wasn't found
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Todo not found" });
+    }
+
+    res.status(200).json({
+      mmessage: "Todo update successfully",
+      todo: result.rows[0],
+    });
+  } catch (err) {
+    console.error("Error updating todo:", err);
+    res.status(500).json({ error: "internal server error" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`server is running at http://localhost:${PORT}`);
 });
