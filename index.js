@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import pool, { initDB } from "./db.js";
 
-
 dotenv.config();
 
 const app = express();
@@ -27,7 +26,7 @@ app.post("/todos", async (req, res) => {
 
   try {
     const queryText = `
-    INSERT INTO Todo (title, description) 
+    INSERT INTO todo (title, description) 
     VALUES ($1, $2)
     RETURNING *;
     `;
@@ -38,6 +37,25 @@ app.post("/todos", async (req, res) => {
     res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error("Error inserting todo", err);
+    res.status(500).json({ error: "internal server error" });
+  }
+});
+
+// GET Route to fetch all todos
+
+app.get("/todos/all", async (req, res) => {
+  try {
+    const queryText = `
+    SELECT * FROM todo ORDER BY created_at DESC;
+    `;
+    const result = await pool.query(queryText);
+
+    res.status(200).json({
+      count: result.rowCount,
+      todos: result.rows,
+    });
+  } catch (err) {
+    console.error("Error fetching todos:", err);
     res.status(500).json({ error: "internal server error" });
   }
 });
